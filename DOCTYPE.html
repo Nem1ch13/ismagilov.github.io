@@ -1,0 +1,979 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Цифровая трансформация нефтяной отрасли</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #2c3e50;
+            --secondary: #e74c3c;
+            --accent: #3498db;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --success: #2ecc71;
+            --warning: #f39c12;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Open Sans', sans-serif;
+            line-height: 1.8;
+            color: var(--dark);
+            background-color: var(--light);
+            scroll-behavior: smooth;
+        }
+        
+        h1, h2, h3, h4, nav {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Шапка */
+        header {
+            background: linear-gradient(135deg, var(--primary), #1a252f);
+            color: white;
+            padding: 4rem 0 3rem;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        header::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url('https://i.imgur.com/tHB6ISW.png') center/cover;
+            opacity: 0.15;
+            z-index: 0;
+        }
+        
+        header .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.3);
+        }
+        
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.9;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            margin-top: 2.5rem;
+            flex-wrap: wrap;
+        }
+        
+        .stat-item {
+            background: rgba(255,255,255,0.1);
+            border-radius: 8px;
+            padding: 1.2rem 2rem;
+            margin: 0 1rem;
+            min-width: 200px;
+            backdrop-filter: blur(5px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        
+        .stat-item strong {
+            font-size: 2.2rem;
+            display: block;
+            color: white;
+            margin-bottom: 0.3rem;
+        }
+        
+        .stat-item span {
+            font-size: 0.9rem;
+            opacity: 0.8;
+        }
+        
+        /* Навигация */
+        nav {
+            background: white;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 15px rgba(0, 0, 0, 0.1);
+            border-top: 3px solid var(--secondary);
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 1.2rem 0;
+        }
+        
+        nav li {
+            margin: 0 1.8rem;
+            position: relative;
+        }
+        
+        nav a {
+            color: var(--dark);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            font-size: 1.05rem;
+        }
+        
+        nav a:hover {
+            color: var(--secondary);
+        }
+        
+        nav a::after {
+            content: '';
+            position: absolute;
+            bottom: -12px;
+            left: 0;
+            width: 0;
+            height: 3px;
+            background: var(--secondary);
+            transition: width 0.3s;
+        }
+        
+        nav a:hover::after {
+            width: 100%;
+        }
+        
+        nav a i {
+            margin-right: 10px;
+            font-size: 1.1rem;
+        }
+        
+        /* Содержание */
+        .toc {
+            background: white;
+            border-radius: 12px;
+            padding: 3rem 2rem;
+            margin: 4rem auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            border-top: 5px solid var(--accent);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .toc::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 150px;
+            height: 150px;
+            background: url('https://cdn-icons-png.flaticon.com/512/2933/2933245.png') no-repeat;
+            background-size: contain;
+            opacity: 0.05;
+        }
+        
+        .toc h2 {
+            text-align: center;
+            margin-bottom: 2rem;
+            color: var(--primary);
+            font-size: 2.2rem;
+            position: relative;
+            display: inline-block;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        
+        .toc h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--secondary));
+            border-radius: 3px;
+        }
+        
+        .companies-overview {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2.5rem;
+        }
+        
+        .toc-company {
+            display: flex;
+            align-items: center;
+            padding: 1.5rem;
+            border-radius: 10px;
+            transition: all 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+            text-decoration: none;
+            color: var(--dark);
+            background: var(--light);
+            border: 1px solid rgba(0,0,0,0.05);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .toc-company::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 4px;
+            height: 0;
+            background: var(--secondary);
+            transition: height 0.3s;
+        }
+        
+        .toc-company:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.12);
+        }
+        
+        .toc-company:hover::before {
+            height: 100%;
+        }
+        
+        .toc-logo {
+            width: 70px;
+            height: 70px;
+            margin-right: 1.5rem;
+            flex-shrink: 0;
+            background: white;
+            border-radius: 12px;
+            padding: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .toc-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .toc-info h3 {
+            margin-bottom: 0.5rem;
+            font-size: 1.3rem;
+            color: var(--primary);
+        }
+        
+        .toc-info p {
+            font-size: 0.95rem;
+            color: var(--gray);
+            margin-bottom: 0.5rem;
+        }
+        
+        .toc-info .company-tag {
+            display: inline-block;
+            background: rgba(52, 152, 219, 0.1);
+            color: var(--accent);
+            padding: 0.3rem 0.8rem;
+            border-radius: 50px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            margin-top: 0.5rem;
+        }
+        
+        /* Основной контент */
+        .company-section {
+            background: white;
+            border-radius: 12px;
+            padding: 4rem 3rem;
+            margin: 4rem auto;
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.08);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .company-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 5px;
+            background: linear-gradient(90deg, var(--secondary), var(--accent));
+        }
+        
+        .company-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 1px solid rgba(0,0,0,0.08);
+        }
+        
+        .company-logo {
+            width: 120px;
+            height: 120px;
+            margin-right: 3rem;
+            background: white;
+            border-radius: 15px;
+            padding: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            flex-shrink: 0;
+        }
+        
+        .company-logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+        }
+        
+        .company-title h2 {
+            color: var(--primary);
+            font-size: 2.5rem;
+            margin-bottom: 0.8rem;
+        }
+        
+        .company-title p {
+            color: var(--gray);
+            font-size: 1.2rem;
+            max-width: 700px;
+        }
+        
+        .company-stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .company-stat {
+            background: var(--light);
+            padding: 1.2rem 1.8rem;
+            border-radius: 8px;
+            min-width: 200px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        }
+        
+        .company-stat strong {
+            font-size: 1.8rem;
+            color: var(--primary);
+            display: block;
+            margin-bottom: 0.3rem;
+        }
+        
+        .company-stat span {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .automation-content {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 3rem;
+        }
+        
+        .automation-item {
+            display: flex;
+            gap: 2.5rem;
+            margin-bottom: 2rem;
+            position: relative;
+        }
+        
+        .automation-item::before {
+            content: '';
+            position: absolute;
+            left: 30px;
+            top: 70px;
+            bottom: -2rem;
+            width: 2px;
+            background: rgba(0,0,0,0.05);
+        }
+        
+        .automation-item:last-child::before {
+            display: none;
+        }
+        
+        .automation-icon {
+            flex-shrink: 0;
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--accent), #5dade2);
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.8rem;
+            box-shadow: 0 10px 20px rgba(52, 152, 219, 0.3);
+        }
+        
+        .automation-text h3 {
+            color: var(--primary);
+            margin-bottom: 1.2rem;
+            font-size: 1.5rem;
+            position: relative;
+            display: inline-block;
+        }
+        
+        .automation-text h3::after {
+            content: '';
+            position: absolute;
+            bottom: -8px;
+            left: 0;
+            width: 50px;
+            height: 3px;
+            background: var(--secondary);
+            border-radius: 3px;
+        }
+        
+        .automation-text p {
+            color: var(--dark);
+            margin-bottom: 1.5rem;
+            font-size: 1.05rem;
+        }
+        
+        .tech-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        
+        .tech-feature {
+            background: rgba(46, 204, 113, 0.1);
+            color: var(--success);
+            padding: 0.5rem 1rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
+        
+        .tech-feature.warning {
+            background: rgba(243, 156, 18, 0.1);
+            color: var(--warning);
+        }
+        
+        /* Подвал */
+        footer {
+            background: linear-gradient(135deg, var(--primary), var(--dark));
+            color: white;
+            text-align: center;
+            padding: 4rem 0;
+            margin-top: 5rem;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        footer::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: url('https://i.imgur.com/oHSA7c2.png') center/cover;
+            opacity: 0.05;
+            z-index: 0;
+        }
+        
+        footer .container {
+            position: relative;
+            z-index: 1;
+        }
+        
+        footer h3 {
+            font-size: 1.8rem;
+            margin-bottom: 1.5rem;
+        }
+        
+        footer p {
+            margin-bottom: 1.5rem;
+            max-width: 700px;
+            margin-left: auto;
+            margin-right: auto;
+            opacity: 0.9;
+        }
+        
+        .footer-links {
+            display: flex;
+            justify-content: center;
+            margin-top: 2rem;
+            gap: 1.5rem;
+        }
+        
+        .footer-links a {
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.1);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            transition: all 0.3s;
+            text-decoration: none;
+        }
+        
+        .footer-links a:hover {
+            background: var(--accent);
+            transform: translateY(-5px);
+        }
+        
+        .copyright {
+            margin-top: 3rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+            font-size: 0.9rem;
+            opacity: 0.7;
+        }
+        
+        /* Анимации */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .company-section, .toc {
+            animation: fadeIn 0.6s ease-out forwards;
+        }
+        
+        .company-section:nth-child(2) { animation-delay: 0.1s; }
+        .company-section:nth-child(3) { animation-delay: 0.2s; }
+        .company-section:nth-child(4) { animation-delay: 0.3s; }
+        
+        /* Адаптивность */
+        @media (max-width: 992px) {
+            header h1 {
+                font-size: 2.5rem;
+            }
+            
+            .stat-item {
+                min-width: 160px;
+                padding: 1rem 1.5rem;
+                margin: 0.5rem;
+            }
+            
+            .stat-item strong {
+                font-size: 1.8rem;
+            }
+            
+            .company-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .company-logo {
+                margin-right: 0;
+                margin-bottom: 2rem;
+            }
+            
+            .automation-item {
+                flex-direction: column;
+                gap: 1.5rem;
+            }
+            
+            .automation-item::before {
+                display: none;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+                align-items: center;
+                gap: 1rem;
+            }
+            
+            nav li {
+                margin: 0;
+            }
+            
+            nav a::after {
+                bottom: -8px;
+            }
+            
+            .toc {
+                padding: 2rem 1.5rem;
+            }
+            
+            .companies-overview {
+                grid-template-columns: 1fr;
+            }
+            
+            .company-section {
+                padding: 3rem 2rem;
+            }
+            
+            .company-stat {
+                min-width: 100%;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            header {
+                padding: 3rem 0 2rem;
+            }
+            
+            header h1 {
+                font-size: 2rem;
+            }
+            
+            header p {
+                font-size: 1.1rem;
+            }
+            
+            .stat-item {
+                min-width: 120px;
+                padding: 0.8rem 1rem;
+            }
+            
+            .stat-item strong {
+                font-size: 1.5rem;
+            }
+            
+            .company-title h2 {
+                font-size: 2rem;
+            }
+            
+            .automation-icon {
+                width: 60px;
+                height: 60px;
+                font-size: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Шапка -->
+    <header>
+        <div class="container">
+            <h1><i class="fas fa-robot"></i> Цифровая трансформация нефтяной отрасли</h1>
+            <p>Передовые технологии автоматизации и цифровизации в ведущих нефтяных компаниях России</p>
+            
+            <div class="header-stats">
+                <div class="stat-item">
+                    <strong>87%</strong>
+                    <span>компаний внедряют ИИ</span>
+                </div>
+                <div class="stat-item">
+                    <strong>45%</strong>
+                    <span>рост эффективности</span>
+                </div>
+                <div class="stat-item">
+                    <strong>2.3x</strong>
+                    <span>окупаемость технологий</span>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <!-- Навигация -->
+    <nav>
+        <div class="container">
+            <ul>
+                <li><a href="#toc"><i class="fas fa-list-ul"></i> Содержание</a></li>
+                <li><a href="#tatneft"><i class="fas fa-oil-can"></i> Татнефть</a></li>
+                <li><a href="#lukoil"><i class="fas fa-gas-pump"></i> Лукойл</a></li>
+                <li><a href="#gazprom"><i class="fas fa-industry"></i> Газпром нефть</a></li>
+            </ul>
+        </div>
+    </nav>
+    
+    <main class="container">
+        <!-- Содержание -->
+        <section id="toc" class="toc">
+            <h2><i class="fas fa-book-open"></i> Ключевые игроки отрасли</h2>
+            <div class="companies-overview">
+                <a href="#tatneft" class="toc-company">
+                    <div class="toc-logo">
+                        <img src="https://avatars.mds.yandex.net/i?id=a0a8afb59d0c0eb12b075f62a93af3636353d64e-12764650-images-thumbs&n=13" alt="Татнефть">
+                    </div>
+                    <div class="toc-info">
+                        <h3>Татнефть</h3>
+                        <p>Лидер по внедрению цифровых двойников и автоматизации добычи</p>
+                        <span class="company-tag">Инновации 2025</span>
+                    </div>
+                </a>
+                
+                <a href="#lukoil" class="toc-company">
+                    <div class="toc-logo">
+                        <img src="https://avatars.mds.yandex.net/i?id=4188636e3b887e60302a126c80f39a6149a2141b-5513384-images-thumbs&n=13" alt="Лукойл">
+                    </div>
+                    <div class="toc-info">
+                        <h3>Лукойл</h3>
+                        <p>Пионер в создании "умных" нефтеперерабатывающих заводов</p>
+                        <span class="company-tag">Цифровой лидер</span>
+                    </div>
+                </a>
+                
+                <a href="#gazprom" class="toc-company">
+                    <div class="toc-logo">
+                        <img src="https://avatars.mds.yandex.net/i?id=1bb40825be5165393becb899439df6abe4f8ec70-5221767-images-thumbs&n=13" alt="Газпром нефть">
+                    </div>
+                    <div class="toc-info">
+                        <h3>Газпром нефть</h3>
+                        <p>Передовые решения в области цифровых месторождений</p>
+                        <span class="company-tag">ТОП-10 РФ</span>
+                    </div>
+                </a>
+            </div>
+        </section>
+        
+        <!-- Татнефть -->
+        <section id="tatneft" class="company-section">
+            <div class="company-header">
+                <div class="company-logo">
+                    <img src="https://avatars.mds.yandex.net/i?id=a0a8afb59d0c0eb12b075f62a93af3636353d64e-12764650-images-thumbs&n=13" alt="Татнефть">
+                </div>
+                <div class="company-title">
+                    <h2>Татнефть</h2>
+                    <p>Технологический лидер в автоматизации процессов добычи нефти и внедрении инновационных решений</p>
+                </div>
+            </div>
+            
+            <div class="company-stats">
+                <div class="company-stat">
+                    <strong>94%</strong>
+                    <span>автоматизированных скважин</span>
+                </div>
+                <div class="company-stat">
+                    <strong>₽12.8 млрд</strong>
+                    <span>инвестиции в цифровизацию</span>
+                </div>
+                <div class="company-stat">
+                    <strong>2020</strong>
+                    <span>год начала цифровой трансформации</span>
+                </div>
+            </div>
+            
+            <div class="automation-content">
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Цифровые двойники месторождений</h3>
+                        <p>Татнефть создала полномасштабные цифровые копии 22 своих месторождений, что позволяет моделировать различные сценарии разработки и оптимизировать процессы добычи. Система анализирует более 15,000 параметров в реальном времени, что привело к увеличению нефтеотдачи на 5-7% и сокращению затрат на 18%.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Моделирование в реальном времени</span>
+                            <span class="tech-feature">Прогнозная аналитика</span>
+                            <span class="tech-feature warning">Внедрено на 80% активов</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-microchip"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Интеллектуальные системы управления</h3>
+                        <p>Компания внедрила комплексные SCADA-системы на всех производственных объектах. Автоматизированные системы управления анализируют более 2000 параметров работы оборудования, что позволило сократить количество аварийных остановов на 62% и увеличить межремонтный период оборудования на 35%.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">SCADA системы</span>
+                            <span class="tech-feature">IoT датчики</span>
+                            <span class="tech-feature">Преактивная аналитика</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-brain"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Искусственный интеллект в геологоразведке</h3>
+                        <p>Нейросетевые алгоритмы Tatneft AI Geo анализируют сейсмические данные с точностью на 30% выше традиционных методов. Система уже обнаружила 3 новых перспективных месторождения, которые были пропущены традиционными методами разведки. Время обработки данных сократилось с 3 месяцев до 2 недель.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Глубинное обучение</span>
+                            <span class="tech-feature warning">3 новых месторождения</span>
+                            <span class="tech-feature">Скорость анализа x6</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Лукойл -->
+        <section id="lukoil" class="company-section">
+            <div class="company-header">
+                <div class="company-logo">
+                    <img src="https://avatars.mds.yandex.net/i?id=4188636e3b887e60302a126c80f39a6149a2141b-5513384-images-thumbs&n=13" alt="Лукойл">
+                </div>
+                <div class="company-title">
+                    <h2>Лукойл</h2>
+                    <p>Пионер цифровой трансформации нефтепереработки с фокусом на "умных" НПЗ и логистике</p>
+                </div>
+            </div>
+            
+            <div class="company-stats">
+                <div class="company-stat">
+                    <strong>7/12</strong>
+                    <span>полностью автоматизированных НПЗ</span>
+                </div>
+                <div class="company-stat">
+                    <strong>₽9.2 млрд</strong>
+                    <span>экономия в год</span>
+                </div>
+                <div class="company-stat">
+                    <strong>500+</strong>
+                    <span>роботизированных лабораторий</span>
+                </div>
+            </div>
+            
+            <div class="automation-content">
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-cogs"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Умные нефтеперерабатывающие заводы</h3>
+                        <p>Лукойл создал концепцию "Цифрового НПЗ", где 92% процессов управляются автоматизированными системами. На заводе в Волгограде внедрена система предиктивной аналитики, которая сократила количество аварийных остановов на 45% и повысила энергоэффективность на 18%. Каждый завод генерирует более 5 ТБ данных ежедневно.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Цифровые двойники</span>
+                            <span class="tech-feature">Предиктивная аналитика</span>
+                            <span class="tech-feature warning">92% автоматизации</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Цифровая логистическая платформа</h3>
+                        <p>Компания разработала единую цифровую платформу Lukoil Logistics AI, которая объединяет данные от 1500 танкеров, 5000 цистерн и 120 нефтебаз. Использование IoT-датчиков и блокчейн-технологий позволило сократить логистические издержки на 18%, минимизировать человеческий фактор и повысить прозрачность цепочек поставок.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Блокчейн трекинг</span>
+                            <span class="tech-feature">IoT мониторинг</span>
+                            <span class="tech-feature">Оптимизация маршрутов</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-tint"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Автоматизированный контроль качества</h3>
+                        <p>Роботизированные лаборатории Lukoil LabBot проводят более 500 анализов качества нефтепродуктов в сутки с точностью, превышающей человеческие возможности в 3 раза. Система автоматически корректирует параметры переработки, что позволило сократить количество несоответствий ГОСТ на 73% и увеличить выход светлых нефтепродуктов на 5%.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Роботизированные лаборатории</span>
+                            <span class="tech-feature warning">Точность +300%</span>
+                            <span class="tech-feature">Автокоррекция процессов</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <!-- Газпром нефть -->
+        <section id="gazprom" class="company-section">
+            <div class="company-header">
+                <div class="company-logo">
+                    <img src="https://avatars.mds.yandex.net/i?id=1bb40825be5165393becb899439df6abe4f8ec70-5221767-images-thumbs&n=13" alt="Газпром нефть">
+                </div>
+                <div class="company-title">
+                    <h2>Газпром нефть</h2>
+                    <p>Лидер в цифровизации нефтегазовой отрасли с акцентом на арктические проекты и большие данные</p>
+                </div>
+            </div>
+            
+            <div class="company-stats">
+                <div class="company-stat">
+                    <strong>15</strong>
+                    <span>цифровых месторождений</span>
+                </div>
+                <div class="company-stat">
+                    <strong>120</strong>
+                    <span>промышленных дронов</span>
+                </div>
+                <div class="company-stat">
+                    <strong>40%</strong>
+                    <span>рост эффективности разведки</span>
+                </div>
+            </div>
+            
+            <div class="automation-content">
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-digital-tachograph"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Проект "Цифровое месторождение"</h3>
+                        <p>Программа "Цифровое месторождение" реализована на 15 промыслах компании, включая арктические месторождения. Автоматизированные системы управляют 80% технологических процессов без вмешательства человека. Внедрение технологии позволило сократить штат операторов на 40% при увеличении добычи на 12%.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Арктические решения</span>
+                            <span class="tech-feature warning">-40% персонала</span>
+                            <span class="tech-feature">+12% добычи</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-drone"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Беспилотные технологии мониторинга</h3>
+                        <p>Флот из 120 специализированных дронов Gazprom DroneInspector осуществляет круглосуточный мониторинг 12,000 км трубопроводов и производственной инфраструктуры. Система использует компьютерное зрение для обнаружения дефектов с точностью 98%, что сократило затраты на инспекцию на 60% и повысило безопасность.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Компьютерное зрение</span>
+                            <span class="tech-feature">12,000 км трубопроводов</span>
+                            <span class="tech-feature warning">98% точность</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="automation-item">
+                    <div class="automation-icon">
+                        <i class="fas fa-database"></i>
+                    </div>
+                    <div class="automation-text">
+                        <h3>Когнитивный анализ больших данных</h3>
+                        <p>Когнитивная система Cognitive Exploration анализирует петабайты геологических данных, объединяя информацию со 150 параметров. Алгоритмы машинного обучения выявляют скрытые закономерности, повышая эффективность поиска новых месторождений на 40%. Система уже обнаружила 2 перспективных участка в Восточной Сибири.</p>
+                        <div class="tech-features">
+                            <span class="tech-feature">Машинное обучение</span>
+                            <span class="tech-feature">150 параметров анализа</span>
+                            <span class="tech-feature">2 новых месторождения</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+    
+    <!-- Подвал -->
+    <footer>
+        <div class="container">
+            <h3>Цифровая трансформация нефтяной отрасли</h3>
+            <p>Информационный портал о современных технологиях автоматизации в ведущих нефтяных компаниях России. Все данные актуальны на 2025 год.</p>
+                    
+            
+            <div class="copyright">
+                <p>© 2025 Все права защищены. Информация предоставлена для ознакомления.</p>
+                <p>Логотипы компаний являются собственностью соответствующих организаций.</p>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
